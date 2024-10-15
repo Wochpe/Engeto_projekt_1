@@ -1,63 +1,78 @@
-Texty = [
+Texts = [
     "Pokud si chceš vyzkoušet nabité znalosti, 1.2 nyní 12 máš¨' skvělou příležitost. Čeká na tebe první praktický projekt, kde si můžeš svoje dovednosti aplikovat.",
     "Soubor těchto pravidel pro čistý kód můžeš najít v 5 oficiální dokumentaci zde. Nicméně pravidel je tam více, než v tento 2 moment dovedeš uplatnit. Proto si nyní ukážeme ty nejpodstatnější.",
     "Python ti dovolí napsat mezery prakticky kdekoliv, 1 ale to neznamená, že je to 1 správně. Ukážeme ti nyní 1 několik variant."
 ]
+## počet slov v textu
+choice = int(input()) - 1
+Texts_str = Texts[choice].split(" ")
+word_count = (len(Texts_str))
+print("There are", word_count, "words in the selected text.")
 
-vyber = int(input()) - 1
-pocet_slov = Texty[vyber].split(" ")
-print(len(pocet_slov))
-
-is_upper = 0
+## počet slov v textu jsou malými písmeny, jsou velkými písmeny nebo jen začínají velkým písmenem
 is_lower = 0
-for slovo in pocet_slov:
-    if slovo.istitle():
-        is_upper += 1
-    else:
+is_upper = 0
+is_title = 0
+for word in Texts_str:
+    if word.islower():
         is_lower += 1
-hodnota_textu = 0.0
-delky_slov = []
-for slovo in pocet_slov:
-    delka_slova = 0
-    cislo = str(0)                  # Musí obsahovat hodnotu pro případ, že se nenajde žádné číslo k přičtení. To by nešlo převést na float pak.
-    for znak in slovo:
-        delka_slova += 1           
-        if znak.isalpha():
-            continue                        
-        elif znak.isnumeric() or znak == ".":
-            cislo += str(znak)
-        else:
-            continue                               
+    elif word.isupper():
+        is_upper += 1
+    elif word.istitle():
+        is_title += 1
     else:
-        delky_slov.append(delka_slova)
-        cislo.join(cislo)
-        hodnota_textu += float(cislo)
-print(hodnota_textu)
-print(is_upper, is_lower)
+        continue
 
+print("There are", is_title, "titlecase words.")
+print("There are", is_upper, "uppercase words.")
+print("There are", is_lower, "lowercase words.")
 
-# graph
+## počet a součet všech čísel v textu
+numbers = []                         # Sem se budou přidávat nalezené číselné výskyty.  
+words_len = []                          # Bude zaznamenávat list délek slov pro graf.
+for word in Texts_str:
+    word_len = 0                            # Reset délky slova.
+    number = str()                           # Musí obsahovat hodnotu pro případ, že se nenajde žádné číslo k přičtení. To by pak nešlo převést na float.
+    for symbol in word:
+        word_len += 1                           # Zaznamenává délku slova.
+        if symbol.isalpha():                    # Když bude začínat písmenem, tak ho zrovna vyřadíme a nepokračujeme v ověřování, jinak by byla tečka problém.
+            continue
+        elif symbol.isnumeric() or symbol == ".":
+            number += str(symbol)
+        else:
+            continue                                                      
+    else:
+        words_len.append(word_len)                      # Přidává délku slova do listu délek.
+        number.join(number)                         # Dává další cifru do stringu čísla.
+        if number != '' and number != '.':                         
+            numbers.append(float(number))                       # Přidává další číslo do listu čísel. Float kvůli následnému sečtení.
+        else:
+            continue                       
+                 
+print("There are", len(numbers), "numeric strings.")
+print("The sum of all numbers is", sum(numbers))
+
+# graf
 ## list délek slov
-jedinecne = set(delky_slov)               
-delky_slov = list(delky_slov)
-pocty = list()
+unique = set(words_len)
+words_len = list(words_len)              
+counts = list()
 
 ## list výskytu jedinečných délek slov
-for pocet in jedinecne:
-    pocet = delky_slov.count(pocet)
-    pocty.append(int(pocet))
+for count in unique:
+    count = words_len.count(count)
+    counts.append(int(count))
 else:
-    pocty= sorted(list(pocty), reverse= True)
+    counts= sorted(list(counts), reverse= True)
 
 ## vypsání grafu
 graph_delim = "*"
-for delka in jedinecne:
-    count = (delky_slov.count(delka))
-    if delka < 10:
-        print( delka, "|", graph_delim * count, "|".rjust((pocty[0] + 4) - count), count, sep= "")
-    elif delka < 100:
-        print( delka, "|", graph_delim * count, "|".rjust((pocty[0] + 3) - count), count, sep= "")
+for lenght in unique:
+    count = (words_len.count(lenght))
+    if lenght < 10:
+        print( "".ljust(1), lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
+    elif lenght < 100:
+        print(lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
     else:
         print("Extremely long words or text with different separator than ' '. Terminating program...")
         break
-
