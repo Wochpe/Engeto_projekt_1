@@ -14,7 +14,7 @@ Situated about 10 miles west of Kemmerer,
 Fossil Butte is a ruggedly impressive
 topographic feature that rises sharply
 some 1000 feet above Twin Creek Valley
-to an elevation of more than 7500 feet
+to an elevation of 1.2 more than 7500 feet
 above sea level. The butte is located just
 north of US 30N and the Union Pacific Railroad,
 which traverse the valley.''',
@@ -50,7 +50,7 @@ if name not in registred.keys() or password not in registred.values():
     print("username:", name)
     print("password:", password)
     print(delim)
-    print("Unregistered user or invalid password, terminating the program...")  # Já osobně bych mu dala další pokus
+    print("Unregistered user or invalid password, terminating the program...")                   # Já osobně bych mu dala další pokus
     exit(1)
 
 # vlastní průběh programu
@@ -76,7 +76,6 @@ else:
 ## příprava textu
 text_num -= 1                          # Převedení zvoleného čísla na hodnotu indexu v listu
 texts_str = TEXTS[text_num].removeprefix("\n").removesuffix(".")
-
 texts_str = texts_str.replace(". ", " " ).replace("\n", " ").replace(",", " ").split(" ")
 
 
@@ -107,10 +106,10 @@ numbers = []                         # Sem se budou přidávat nalezené čísel
 words_len = []                          # Bude zaznamenávat list délek slov pro graf.
 for word in texts_str:
     word_len = 0                            # Reset délky slova.
-    number = str()                           # Musí obsahovat hodnotu pro případ, že se nenajde žádné číslo k přičtení. To by pak nešlo převést na float.
+    number = ""                           # Musí obsahovat hodnotu pro případ, že se nenajde žádné číslo k přičtení. To by pak nešlo převést na float.
     for symbol in word:
         word_len += 1                           # Zaznamenává délku slova.
-        if symbol.isalpha():                    # Když bude začínat písmenem, tak zrovna smyčku ukončíme a nepokračujeme v ověřování, jinak by byla tečka problém.
+        if symbol.isalpha():                    # Když bude začínat písmenem, tak zrovna smyčku ukončíme a nepokračujeme v ověřování (i ochrana před opomenutou tečkou).
             continue
         elif symbol.isnumeric() or symbol == ".":
             number += str(symbol)
@@ -152,6 +151,6 @@ for lenght in unique:
         print( "".ljust(1), lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
     elif lenght < 100:
         print(lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
-    # else:
-    #     print("Extremely long words or text with different separator than ' '. Terminating program...")
-    #     break
+    else:
+        print("Extremely long words or text with different separator than ' '. Unable to print the graph")
+        break
