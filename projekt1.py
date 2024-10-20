@@ -14,7 +14,7 @@ Situated about 10 miles west of Kemmerer,
 Fossil Butte is a ruggedly impressive
 topographic feature that rises sharply
 some 1000 feet above Twin Creek Valley
-to an elevation of 1.2 more than 7500 feet
+to an elevation of more than 7500 feet
 above sea level. The butte is located just
 north of US 30N and the Union Pacific Railroad,
 which traverse the valley.''',
@@ -42,7 +42,7 @@ garpike and stingray are also present.'''
 print("Input username:")
 name = input()
 print("Input password:")
-password = str(input())
+password = input()
 
 
 # ověření uživatele
@@ -50,7 +50,7 @@ if name not in registred.keys() or password not in registred.values():
     print("username:", name)
     print("password:", password)
     print(delim)
-    print("Unregistered user or invalid password, terminating the program...")                   # Já osobně bych mu dala další pokus
+    print("Unregistered user or invalid password, terminating the program...")  # Já osobně bych mu dala další pokus
     exit(1)
 
 # vlastní průběh programu
@@ -58,12 +58,10 @@ else:
     print("username:", name)
     print("password:", password)
     print(delim)
-    print("Welcome to the Textalyz,", name)
+    print("Welcome to the app,", name)
     print("We have 3 texts to be analyzed.")
     print(delim)
-    print("Enter a number btw. 1 and 3 to select:")
-    text_num = int(input())
-    
+    text_num = int(input("Enter a number btw. 1 and 3 to select: "))
     if type(text_num) != int:
         print("Invalid input type, terminating the program...")
         exit(2)
@@ -76,8 +74,8 @@ else:
 ## příprava textu
 text_num -= 1                          # Převedení zvoleného čísla na hodnotu indexu v listu
 texts_str = TEXTS[text_num].removeprefix("\n").removesuffix(".")
-texts_str = texts_str.replace(". ", " " ).replace("\n", " ").replace(",", " ").split(" ")
 
+texts_str = texts_str.replace(". ", " " ).replace("\n", " ").replace(",", "").split(" ")
 
 ## počet slov v textu
 word_count = (len(texts_str))
@@ -106,12 +104,12 @@ numbers = []                         # Sem se budou přidávat nalezené čísel
 words_len = []                          # Bude zaznamenávat list délek slov pro graf.
 for word in texts_str:
     word_len = 0                            # Reset délky slova.
-    number = ""                           # Musí obsahovat hodnotu pro případ, že se nenajde žádné číslo k přičtení. To by pak nešlo převést na float.
+    number = str()                           # Musí obsahovat hodnotu pro případ, že se nenajde žádné číslo k přičtení.
     for symbol in word:
         word_len += 1                           # Zaznamenává délku slova.
-        if symbol.isalpha():                    # Když bude začínat písmenem, tak zrovna smyčku ukončíme a nepokračujeme v ověřování (i ochrana před opomenutou tečkou).
+        if symbol.isalpha():                    # Když bude začínat písmenem, tak zrovna smyčku ukončíme a nepokračujeme v ověřování.
             continue
-        elif symbol.isnumeric() or symbol == ".":
+        elif word.isnumeric() and symbol.isnumeric():
             number += str(symbol)
         else:
             continue                                                      
@@ -119,7 +117,7 @@ for word in texts_str:
         words_len.append(word_len)                      # Přidává délku slova do listu délek.
         number.join(number)                         # Dává další cifru do stringu čísla.
         if number != '' and number != '.':                         
-            numbers.append(float(number))                       # Přidává další číslo do listu čísel. Float kvůli následnému sečtení.
+            numbers.append(int(number))                       # Přidává další číslo do listu čísel.
         else:
             continue                       
                  
@@ -152,5 +150,5 @@ for lenght in unique:
     elif lenght < 100:
         print(lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
     else:
-        print("Extremely long words or text with different separator than ' '. Unable to print the graph")
+        print("Extremely long words or text with a word separator other than space. Unable to create graph.")
         break
