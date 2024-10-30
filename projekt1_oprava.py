@@ -42,11 +42,11 @@ garpike and stingray are also present.'''
 print("Input username:")
 name = input()
 print("Input password:")
-password = input()
-
+password = str(input())                 # Může být jen číselné heslo.
+user = (name, password)                 # Musíme obojí převést na tuple, ptž chceme porovnávat s .items(), který na něj převádí hodnoty dictu.
 
 # ověření uživatele
-if name not in registred.keys() or password not in registred.values():
+if user not in registred.items():
     print("username:", name)
     print("password:", password)
     print(delim)
@@ -61,18 +61,18 @@ else:
     print("Welcome to the app,", name)
     print("We have 3 texts to be analyzed.")
     print(delim)
-    text_num = int(input("Enter a number btw. 1 and 3 to select: "))
-    if type(text_num) != int:
-        print("Invalid input type, terminating the program...")
+    text_num = input("Enter a number btw. 1 and 3 to select: ")
+
+    if text_num.isalpha():
+        print("Input not numeric, terminating the program...")
         exit(2)
-    elif text_num not in range(1,4):
+    elif int(text_num) not in range(1, 4):                     # Range kvůli potencionálnímu rozšiřování počtu textů.
         print("Invalid number, terminating the program...")
         exit(3)
-    else:
         print(delim)
 
 ## příprava textu
-text_num -= 1                          # Převedení zvoleného čísla na hodnotu indexu v listu
+text_num = int(text_num) - 1                         # Převedení zvoleného čísla na hodnotu indexu v listu.
 texts_str = TEXTS[text_num].removeprefix("\n").removesuffix(".")
 
 texts_str = texts_str.replace(". ", " " ).replace("\n", " ").replace(",", "").split(" ")
@@ -124,9 +124,7 @@ for word in texts_str:
 print("There are", len(numbers), "numeric strings.")
 print("The sum of all numbers is", sum(numbers))
 
-print(delim)
-print("LEN|  OCCURENCES  |NR.")
-print(delim)
+
 
 ## graf
 ### list délek slov
@@ -142,13 +140,19 @@ else:
     counts= sorted(list(counts), reverse= True)
 
 ### vypsání grafu
+
 graph_delim = "*"
+print(delim)
+print("LEN|" +  "OCCURENCES".center((counts[0]) + 2) +  "|NR.")             # Samozřemě limitující je délka slova occurences
+print(delim)
+
+
 for lenght in unique:
     count = (words_len.count(lenght))
     if lenght < 10:
-        print( "".ljust(1), lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
+        print( "".ljust(2), lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
     elif lenght < 100:
-        print(lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
+        print("".ljust(1), lenght, "|", graph_delim * count, "|".rjust((counts[0] + 3) - count), count, sep = "")
     else:
         print("Extremely long words or text with a word separator other than space. Unable to create graph.")
         break
